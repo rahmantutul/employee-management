@@ -7,15 +7,17 @@ use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Intervention\Image\Facades\Image;
-
+use Dompdf\Dompdf;
 class EmployeeController extends Controller
 {
    public function index(){
+       Paginator::useBootstrap();
        $title= 'Employees';
-       $employees= Employee::get();
+       $employees= Employee::paginate(7);
        return view('backend/pages/employee/index')->with(compact('title','employees'));
    }
 
@@ -28,7 +30,7 @@ class EmployeeController extends Controller
             $request->validate([
                 'first_name' => 'required',
                 'last_name' => 'required',
-                'email' => 'required|email|unique:admins',
+                'email' => 'unique:employees,email',
                 'phone' =>'required|max:11',
                 'city'=>'required',
                 'company_id'=>'required',
@@ -47,7 +49,7 @@ class EmployeeController extends Controller
              $profileImage = Image::make($image)->resize(100,100)->stream();
              Storage::disk('public')->put('images/admin/'.$imageName,$profileImage);
             }else{
-                $imageName= "default.png";
+                $imageName= 'default.png';
             }
             $employee = New Employee;
             $employee->company_id=$data['company_id'];
@@ -76,7 +78,7 @@ class EmployeeController extends Controller
             $request->validate([
                 'first_name' => 'required',
                 'last_name' => 'required',
-                'email' => 'required|email|unique:admins',
+                'email' => 'unique:employees,email,'.$employee->id,
                 'phone' =>'required|max:11',
                 'city'=>'required',
                 'company_id'=>'required',
@@ -151,5 +153,85 @@ class EmployeeController extends Controller
         $employees=Employee::where('company_id',$employeeData->id)->get();
         // dd($employees);
         return view('backend.pages.report')->with(compact('employeeData','employees','title'));
+    }
+
+    public function export_report($id){
+        $title='REPORT';
+        $employeeData= Company::find($id);
+        $employees=Employee::where('company_id',$employeeData->id)->get();
+        $output='<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, nitial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>Document</title>
+            <link rel="stylesheet" href="'.asset('backend/vendors/mdi/css/materialdesignicons.min.css').'">
+                <link rel="stylesheet" href="'. asset('backend/vendors/base/vendor.bundle.base.css').'">
+                <link rel="stylesheet" href="'. asset('backend/vendors/datatables.net-bs4/dataTables.bootstrap4.css').'">
+                <link rel="stylesheet" href="'. asset('backend/css/style.css').'">
+                <link rel="shortcut icon" href="'.asset('backend/images/favicon.png').'"/>
+            </head>
+            <body>
+            <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                            <h4 class="card-title">Employees Table</h4>
+                            <h2 style="justify-content:center"> <b> EMPLOYEES OF '. $employeeData["name"].' </b>('.$employees->count().')</h2>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Company
+                                    </th>
+                                    <th>
+                                        City
+                                    </th>
+                                    <th>
+                                        Joining Date
+                                    </th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+                                    foreach ($employees as $employee){
+                                        $output.='<tr>
+                                            <td>
+                                             '.$employee['first_name'].' '. $employee['last_name'].'
+                                            </td>
+                                            <td>
+                                            '.$employeeData['name'].'
+                                            </td>
+                                            <td>
+                                            '.$employee['city'].'
+                                            </td>
+                                            <td>
+                                            '.$employee['join_date'].'
+                                            </td>
+                                        </tr>';
+                                    }
+                                    $output.='</tbody>
+                        </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </body>
+            </html>';
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($output);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream();
+        return view('backend.pages.pdf-formate')->with(compact('employeeData','employees','title'));
     }
 }

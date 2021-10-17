@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Carbon;
 use Intervention\Image\Facades\Image;
+ use HasFactory;
 
 class CompanyController extends Controller
 {
    public function index(){
+       Paginator::useBootstrap();
        $title= 'COMPANIES';
-       $companies= Company::get();
+       $companies= Company::paginate(7);
        return view('backend/pages/companies/index')->with(compact('title','companies'));
    }
 
@@ -105,6 +107,9 @@ class CompanyController extends Controller
             }
         }
         $data->employees()->delete();
+
+         $data->delete();
+        // $data->delete();
         Toastr::success('Info deleted! :)','Success');
         return redirect()->back();
     }

@@ -13,6 +13,17 @@ use App\Models\Company;
                   <p class="card-description">
                        <a href="{{ url('admin/add-employee') }}" style="font-weight:600">New Empoye</a>
                   </p>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="search">
+                        <i class="mdi mdi-magnify"></i>     
+                      </span>   
+                    </div>
+                    <form action="{{ url('admin/search-employee') }}" method="get">
+                          <input value="" name="term" type="text" class="form-control" placeholder="Search now" aria-label="search" aria-describedby="search">
+                          <button type="submit" hidden></button>
+                    </form>
+                  </div>
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
@@ -21,7 +32,7 @@ use App\Models\Company;
                             Avatar
                           </th>
                           <th>
-                            First name
+                            Name
                           </th>
                           <th>
                             Comapany
@@ -47,7 +58,7 @@ use App\Models\Company;
                                     <img src="{{ asset('storage/images/admin/'.$employe['logo']) }}" alt="image"/>
                                 </td>
                                 <td>
-                                {{ $employe['first_name'] }}
+                                {{ $employe['first_name'] }} {{ $employe['last_name'] }}
                                 </td>
                                 <td>
                                   @php
@@ -79,7 +90,15 @@ use App\Models\Company;
                        
                       </tbody>
                     </table>
+                     
                   </div>
+                </div>
+                <div class="d-felx justify-content-center" style="margin:auto">
+                  @if ($title=='Employees')
+                      {{ $employees->links() }}
+                      @else
+                      {!! $employees->withQueryString()->links() !!}
+                  @endif
                 </div>
               </div>
             </div>

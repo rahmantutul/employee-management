@@ -60,9 +60,9 @@
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Joining Date</label>
+                        <label for="exampleInputPassword2" class="col-sm-3 col-form-label" value="">Joining Date</label>
                         <div class="col-sm-9">
-                          <input name="join_date" type="date" class="form-control" id="exampleInputPassword2">
+                          <input name="join_date" type="date" class="form-control" id="exampleInputPassword2" value="{{ $employee['join_date'] }}">
                         </div>
                       </div>
                      <div class="form-group">

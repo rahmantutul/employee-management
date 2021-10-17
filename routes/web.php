@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\CompanyController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\SearchController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\frontend\FrontendController;
 
@@ -42,6 +42,10 @@ Route::prefix('/admin')->namespace('admin.')->group(function () {
         Route::match(['get', 'post'],'/edit-company/{id}',[CompanyController::class, 'edit_company']);
         Route::get('/delete-company/{id}',[CompanyController::class, 'delete']);
         Route::post('/update-company-status',[CompanyController::class, 'updateStatus']);
+                
+        Route::get('/search-company',[SearchController::class,'searchCompany']);
+        Route::get('/search-employee',[SearchController::class,'searchEmployee']);
+        Route::get('/export-report/{id}',[EmployeeController::class, 'export_report']);
     });
     
 });

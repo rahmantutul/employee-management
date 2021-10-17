@@ -7,10 +7,21 @@
     <div class="col-lg-10 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Company Table</h4>
+                  <h4 class="card-title">Company Table</h4> 
                   <p class="card-description">
                        <a href="{{ url('admin/add-company') }}" style="font-weight:600">New Company</a>
                   </p>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="search">
+                        <i class="mdi mdi-magnify"></i>     
+                      </span>   
+                    </div>
+                    <form action="{{ url('admin/search-company') }}" method="get">
+                          <input value="" name="term" type="text" class="form-control" placeholder="Search now" aria-label="search" aria-describedby="search">
+                          <button type="submit" hidden></button>
+                    </form>
+                  </div>
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
@@ -63,14 +74,23 @@
                                     @endif
                                 </td>
                                  <td>
-                                   <a href="{{ url('admin/employee-report', $company['id']) }}" title="Employee Report"> &nbsp; <i class="mdi mdi-file-pdf">Report</i></a> 
-                                </td>
+                                   <a href="{{ url('admin/employee-report', $company['id']) }}" title="Employee Report"> &nbsp; <i class="mdi mdi-file-pdf"></i>Report</a> 
+                                 </td>
                             </tr>
                         @endforeach
                        
                       </tbody>
                     </table>
+                    
                   </div>
+                </div>
+                <div class="d-felx justify-content-center" style="margin:auto">
+                  @if ($title=='COMPANIES')
+                      {{ $companies->links() }}
+                      @else
+                      {!! $companies->withQueryString()->links() !!}
+                  @endif
+                  
                 </div>
               </div>
             </div>

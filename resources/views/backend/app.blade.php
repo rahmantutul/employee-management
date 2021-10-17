@@ -18,6 +18,13 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="{{ asset('backend/images/favicon.png') }}" />
   <link rel="stylesheet" href="{{ asset('backend/css/toastr.css') }}"> 
+<style type="text/css">
+		.my-active span{
+			background-color: #5cb85c !important;
+			color: white !important;
+			border-color: #5cb85c !important;
+		}
+	</style>
    @stack('css')
 </head>
 <body>
