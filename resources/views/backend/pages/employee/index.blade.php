@@ -27,7 +27,7 @@ use App\Models\Company;
                     <div style="margin-top:20px; !important">
                       <span>
                         <select name="selectCity" id="selectCity">
-                          <option>Select City</option>
+                          <option value="">Select City</option>
                           @foreach ($employees as $employee)
                           <option for="selectCity" value="{{$employee->city}}">{{$employee->city}}</option>
                           @endforeach
@@ -35,7 +35,7 @@ use App\Models\Company;
                       </span>
                       <span>
                       <select name="selectCompany" id="selectCompany">
-                        <option >Select Company</option>
+                        <option value="">Select Company</option>
                         @foreach ($employees as $employee)
                         @php
                          $company_name=Company::where('id',$employee->company_id)->first();
@@ -55,12 +55,9 @@ use App\Models\Company;
                       <span>
                       <button type="button" name="filter" id="filter" class="btn btn-primary btn-sm ml-3">Filter</button>
                       </span>
-                      <span>
-                        <button type="button" name="reset" id="reset" class="btn btn-danger btn-sm">Reset</button>
-                      </span>
                     </div>
                   <div class="table-responsive">
-                    <table class="table table-striped"  id="employeeData">
+                    <table class="table table-striped" name="employeeData" id="employeeData">
                       <thead>
                         <tr>
                           <th>
@@ -139,6 +136,5 @@ use App\Models\Company;
             </div>
 @endsection
 @push('script')
-    
    
 @endpush

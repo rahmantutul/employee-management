@@ -24,7 +24,7 @@ Route::get('/employees',[FrontendController::class,'employee'])->name('employee'
 Route::get('/related/{id}',[FrontendController::class,'related'])->name('related');
 Route::get('/company_search',[FrontendController::class,'company_search']);
 Route::get('/employee_search',[FrontendController::class,'employee_search']);
-Route::prefix('/admin')->namespace('admin.')->group(function () {
+Route::prefix('/admin')->namespace('admin')->group(function () {
     Route::match(['get', 'post'],'/',[AdminController::class, 'login'] );
     Route::match(['get', 'post'],'/register',[AdminController::class, 'register']);
 
