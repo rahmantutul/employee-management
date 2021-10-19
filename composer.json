@@ -14,7 +14,8 @@
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "protonemedia/laravel-cross-eloquent-search": "^2.4"
+        "protonemedia/laravel-cross-eloquent-search": "^2.4",
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -18,13 +18,7 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="{{ asset('backend/images/favicon.png') }}" />
   <link rel="stylesheet" href="{{ asset('backend/css/toastr.css') }}"> 
-<style type="text/css">
-		.my-active span{
-			background-color: #5cb85c !important;
-			color: white !important;
-			border-color: #5cb85c !important;
-		}
-	</style>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
    @stack('css')
 </head>
 <body>
@@ -42,6 +36,7 @@
     </div>
   </div>
   <script src="{{ asset('backend/vendors/base/vendor.bundle.base.js') }}"></script>
+  <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="{{ asset('backend/vendors/chart.js/Chart.min.js') }}"></script>
   <script src="{{ asset('backend/vendors/datatables.net/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('backend/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>

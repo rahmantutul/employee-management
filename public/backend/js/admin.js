@@ -82,4 +82,106 @@ jQuery(function() {
             return false;
         }
     });
+    // Employee Data filter
+
+    $(document).ready(function() {
+        $.fn.dataTable.ext.errMode = "throw";
+        fill_dataTable();
+        function fill_dataTable(
+            filter_city = "",
+            filter_company = "",
+            filter_join_date = ""
+        ) {
+            var dataTable = $("#employeeData").DataTable({
+                searching: false,
+                paging: false,
+                serverSide: true,
+                ajax: {
+                    url: "/admin/employee",
+                    data: {
+                        filter_city: filter_city,
+                        filter_company: filter_company,
+                        filter_join_date: filter_join_date
+                    },
+                    columns: [
+                        {
+                            data: "id",
+                            name: "id"
+                        },
+                        {
+                            data: "status",
+                            name: "status"
+                        },
+                        {
+                            data: "first_name",
+                            name: "first_name"
+                        },
+                        {
+                            data: "last_name",
+                            name: "last_name"
+                        },
+                        {
+                            data: "city",
+                            name: "city"
+                        },
+                        {
+                            data: "logo",
+                            name: "logo"
+                        },
+                        {
+                            data: "email",
+                            name: "email"
+                        },
+                        {
+                            data: "join_date",
+                            name: "join_date"
+                        },
+                        {
+                            data: "company_id",
+                            name: "company_id"
+                        },
+                        {
+                            data: "phone",
+                            name: "phone"
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            defaultContent: "-",
+                            targets: "_all"
+                        }
+                    ]
+                }
+            });
+        }
+    });
+
+    $("#filter").click(function() {
+        var filterCity = document.getElementById("#filterCity").value;
+        var filter_company = $("#filerCompany").val();
+        var filter_join_date = $("#filerJoinDate").val();
+        alert(filterCity);
+        die;
+        if (
+            filter_city != "" &&
+            filter_company != "" &&
+            filter_join_date != ""
+        ) {
+            $("#employeeData")
+                .DataTable()
+                .destroy();
+            fill_dataTable(filter_city, filter_company, filter_join_date);
+        } else {
+            console.log("Please select both filters");
+        }
+    });
+    $("#reset").on("click", function() {
+        $("#filerCity").val("");
+        $("#filerCompany").val("");
+        $("#filerJoinDate").val("");
+        $("#employeeData")
+            .DataTable()
+            .destroy();
+        fill_dataTable();
+    });
 });

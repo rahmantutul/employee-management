@@ -12,6 +12,7 @@ use App\Models\Company;
                   <h4 class="card-title">Employe Table</h4>
                   <h2 style="text:center"> <b> EMPLOYEES OF {{ $employeeData['name'] }} </b>({{ $employees->count() }})</h2><span><a href="{{ url('admin/export-report',$employeeData['id']) }}" title="Employee Report"> &nbsp; <i class="mdi mdi-file-send"></i>Export Pdf</a></span>
                   <div class="table-responsive">
+                    </select>
                     <table class="table table-striped">
                       <thead>
                         <tr>

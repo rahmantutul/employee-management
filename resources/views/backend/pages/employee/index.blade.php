@@ -24,8 +24,43 @@ use App\Models\Company;
                           <button type="submit" hidden></button>
                     </form>
                   </div>
+                    <div style="margin-top:20px; !important">
+                      <span>
+                        <select name="selectCity" id="selectCity">
+                          <option>Select City</option>
+                          @foreach ($employees as $employee)
+                          <option for="selectCity" value="{{$employee->city}}">{{$employee->city}}</option>
+                          @endforeach
+                        </select>
+                      </span>
+                      <span>
+                      <select name="selectCompany" id="selectCompany">
+                        <option >Select Company</option>
+                        @foreach ($employees as $employee)
+                        @php
+                         $company_name=Company::where('id',$employee->company_id)->first();
+                        @endphp
+                         <option value="{{$company_name->id}}">{{$company_name->name}}</option>
+                        @endforeach
+                      </select>
+                      </span>
+                      <span>
+                        <select name="selectJoinDate" id="selectJoinDate">
+                          <option value="">Join Date</option>
+                          @foreach ($employees as $employee)
+                          <option value="{{$employee->join_date}}">{{$employee->join_date}}</option>
+                          @endforeach
+                        </select>
+                      </span>
+                      <span>
+                      <button type="button" name="filter" id="filter" class="btn btn-primary btn-sm ml-3">Filter</button>
+                      </span>
+                      <span>
+                        <button type="button" name="reset" id="reset" class="btn btn-danger btn-sm">Reset</button>
+                      </span>
+                    </div>
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped"  id="employeeData">
                       <thead>
                         <tr>
                           <th>
@@ -55,34 +90,34 @@ use App\Models\Company;
                           @foreach ($employees as $employe)
                             <tr>
                                 <td class="py-1">
-                                    <img src="{{ asset('storage/images/admin/'.$employe['logo']) }}" alt="image"/>
+                                    <img src="{{ asset('storage/images/admin/'.$employe->logo) }}" alt="image"/>
                                 </td>
                                 <td>
-                                {{ $employe['first_name'] }} {{ $employe['last_name'] }}
+                                {{ $employe->first_name }} {{ $employe->last_name }}
                                 </td>
                                 <td>
-                                  @php
-                                    $company= Company::where(['id'=>$employe['company_id']])->first();
-                                  @endphp
-                                  {{ $company['name'] }}
+                                @php
+                                    $companies= Company::where('id',$employe->company_id)->first();
+                                @endphp
+                                  {{ $companies->name }}
                                 </td>
                                 <td>
-                                    {{ $employe['join_date'] }}
+                                    {{ $employe->join_date }}
                                 </td>
                                 <td>
-                                    {{ $employe['email'] }}
+                                    {{ $employe->email }}
                                 </td>
                                 <td>
-                                {{ $employe['city'] }}
+                                {{ $employe->city }}
                                 </td>
                                 <td>
-                                    <a href="{{ url('admin/edit-employee', $employe['id']) }}" title="Edit"><i class="mdi mdi-credit-card-off"></i></a> | &nbsp;
-                                    <a href="{{ url('admin/delete-employee',$employe['id']) }}" class="confirmDelete" name="Employee" title="Delete"><i class="mdi mdi-delete-sweep"></i></a> |  &nbsp;
+                                    <a href="{{ url('admin/edit-employee', $employe->id) }}" title="Edit"><i class="mdi mdi-credit-card-off"></i></a> | &nbsp;
+                                    <a href="{{ url('admin/delete-employee',$employe->id) }}" class="confirmDelete" name="Employee" title="Delete"><i class="mdi mdi-delete-sweep"></i></a> |  &nbsp;
                                     <a href="" title="Delete"></a> 
-                                    @if ($employe['status']==1)
-                                    <a href="javascript:void(0)" class="updateEmployeeStatus" id="employee-{{$employe['id']}}" employee_id="{{$employe['id']}}" title="Turn Off"><i class="mdi mdi-toggle-switch" status="Active"></i></a>
+                                    @if ($employe->status==1)
+                                    <a href="javascript:void(0)" class="updateEmployeeStatus" id="employee-{{$employe->id}}" employee_id="{{$employe->id}}" title="Turn Off"><i class="mdi mdi-toggle-switch" status="Active"></i></a>
                                     @else
-                                    <a href="javascript:void(0)" class="updateEmployeeStatus" id="employee-{{$employe['id']}}" employee_id="{{$employe['id']}}" title="Turn ON" ><i class="mdi mdi-toggle-switch-off" status="Disabled"></i></a>
+                                    <a href="javascript:void(0)" class="updateEmployeeStatus" id="employee-{{$employe->id}}" employee_id="{{$employe->id}}" title="Turn ON" ><i class="mdi mdi-toggle-switch-off" status="Disabled"></i></a>
                                     @endif
                                 </td>
                             </tr>
@@ -97,12 +132,13 @@ use App\Models\Company;
                   @if ($title=='Employees')
                       {{ $employees->links() }}
                       @else
-                      {!! $employees->withQueryString()->links() !!}
+                    {!! $companies->withQueryString()->links() !!}
                   @endif
                 </div>
               </div>
             </div>
 @endsection
-@push('css')
+@push('script')
     
+   
 @endpush

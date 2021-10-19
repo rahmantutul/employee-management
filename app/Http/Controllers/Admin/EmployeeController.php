@@ -12,13 +12,41 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Intervention\Image\Facades\Image;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\DB;
+
 class EmployeeController extends Controller
 {
-   public function index(){
+   public function index(Request $request){
+       if($request->ajax()){
+           if(!empty($request->filter_city) &&!empty($request->filter_company && !empty($request->filter_join_date))){
+              $data= DB::table('employees')
+                ->select('id','first_name','last_name','city','email','join_date','company_id','phone','status',)
+                ->where('id',$request->id)
+                ->where('city',$request->city)
+                ->where('logo',$request->logo)
+                ->where('first_name',$request->first_name)
+                ->where('last_name',$request->last_name)
+                ->where('email',$request->email)
+                ->where('join_date',$request->join_date)
+                ->where('company_id',$request->company_id)
+                ->where('phone',$request->phone)
+                ->where('status',$request->status)
+                ->get();
+           }else{
+               $data= DB::table('employees')
+                ->select('id','first_name','last_name','city','email','join_date','company_id','phone','logo','status')
+                ->get();
+           }
+           return dataTables()->of($data)->make(true);
+       }
        Paginator::useBootstrap();
        $title= 'Employees';
-       $employees= Employee::paginate(7);
-       return view('backend/pages/employee/index')->with(compact('title','employees'));
+       $employees=DB::table('employees')
+        ->select('id','first_name','last_name','city','email','join_date','company_id','phone','logo','status')
+        ->paginate(8);
+        // dd($employees);
+        
+        return view('backend.pages.employee.index')->with(compact('title','employees'));
    }
 
    public function add_employee(Request $request){

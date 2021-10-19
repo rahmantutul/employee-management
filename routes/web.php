@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\SearchController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\frontend\FrontendController;
+use App\Http\Controllers\listingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,13 +31,12 @@ Route::prefix('/admin')->namespace('admin.')->group(function () {
     Route::group(['middleware'=>['admin']],function(){
         Route::get('dashboard',[AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('logout',[AdminController::class, 'logout']);
-        Route::get('/employee',[EmployeeController::class, 'index']);
+        Route::get('employee',[EmployeeController::class, 'index'])->name('employee');
         Route::match(['get', 'post'],'/add-employee',[EmployeeController::class, 'add_employee']);
         Route::match(['get', 'post'],'/edit-employee/{id}',[EmployeeController::class, 'edit_employee']);
         Route::get('/delete-employee/{id}',[EmployeeController::class, 'delete']);
         Route::post('/update-employee-status',[EmployeeController::class, 'updateStatus']);
         Route::get('/employee-report/{id}',[EmployeeController::class, 'make_report']);
-
         Route::get('/company',[CompanyController::class, 'index']);
         Route::match(['get', 'post'],'/add-company',[CompanyController::class, 'add_company']);
         Route::match(['get', 'post'],'/edit-company/{id}',[CompanyController::class, 'edit_company']);
@@ -46,6 +46,7 @@ Route::prefix('/admin')->namespace('admin.')->group(function () {
         Route::get('/search-company',[SearchController::class,'searchCompany']);
         Route::get('/search-employee',[SearchController::class,'searchEmployee']);
         Route::get('/export-report/{id}',[EmployeeController::class, 'export_report']);
+        Route::get('/city-filter',[listingController::class,'cityFilter']);
     });
     
 });
